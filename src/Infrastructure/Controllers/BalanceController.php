@@ -2,11 +2,11 @@
 
 namespace Daniel\PaymentSystem\Infrastructure\Controllers;
 
+use Daniel\PaymentSystem\Application\DTO\Request\BalanceRequest;
 use Daniel\PaymentSystem\Application\UseCases\BalanceUseCase;
-use Daniel\PaymentSystem\Application\DTO\BalanceRequest;
+use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class BalanceController
 {

@@ -2,8 +2,8 @@
 
 namespace Daniel\PaymentSystem\Application\UseCases;
 
-use Daniel\PaymentSystem\Application\DTO\BalanceRequest;
-use Daniel\PaymentSystem\Application\DTO\BalanceResponse;
+use Daniel\PaymentSystem\Application\DTO\Request\BalanceRequest;
+use Daniel\PaymentSystem\Application\DTO\Response\BalanceResponse;
 use Daniel\PaymentSystem\Domain\Repositories\WalletRepositoryInterface;
 
 class BalanceUseCase

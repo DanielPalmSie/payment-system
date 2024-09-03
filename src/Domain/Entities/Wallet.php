@@ -58,22 +58,4 @@ class Wallet
     {
         $this->balance = $balance;
     }
-
-    public function deposit(Money $amount): void
-    {
-        $this->balance = $this->balance->add($amount);
-    }
-
-    public function withdraw(Money $amount): void
-    {
-        if ($this->balance->lessThan($amount)) {
-            throw new \InvalidArgumentException("Insufficient funds.");
-        }
-        $this->balance = $this->balance->subtract($amount);
-    }
-
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
 }

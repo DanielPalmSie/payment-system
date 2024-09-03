@@ -2,13 +2,13 @@
 
 namespace Daniel\PaymentSystem\Infrastructure\Controllers;
 
+use Daniel\PaymentSystem\Application\DTO\Request\DepositRequest;
 use Daniel\PaymentSystem\Application\UseCases\DepositUseCase;
-use Daniel\PaymentSystem\Application\DTO\DepositRequest;
+use Laminas\Diactoros\Response\JsonResponse;
 use Money\Currency;
 use Money\Money;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class DepositController
 {
@@ -63,21 +63,23 @@ class DepositController
         try {
             $data = $request->getParsedBody();
 
-            $paymentToken = $data['payment_token'] ?? '';
-            $transactionId = (int) $data['transaction_id'] ?? 0;
+            $billId = $data['bill_id'] ?? '';
 
-            if (empty($paymentToken) || $transactionId === 0) {
-                throw new \InvalidArgumentException('Required fields are missing');
+            if (empty($billId)) {
+                throw new \InvalidArgumentException('bill_id is required');
             }
 
-            $this->depositUseCase->confirmDeposit($paymentToken, $transactionId);
+            $this->depositUseCase->confirmDeposit($billId);
 
-            return new JsonResponse(['success' => true, 'message' => 'Deposit confirmed.']);
+            return new JsonResponse([
+                'success' => true,
+                'msg' => 'Deposit confirmed successfully'
+            ]);
 
         } catch (\Exception $e) {
             return new JsonResponse([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'msg' => $e->getMessage(),
             ], 400);
         }
     }

@@ -86,8 +86,8 @@ class MySQLTransactionRepository implements TransactionRepositoryInterface
             amount: new Money($data['amount'], new \Money\Currency('USD')),
             balanceBefore: new Money($data['balance_before'], new \Money\Currency('USD')),
             balanceAfter: new Money($data['balance_after'], new \Money\Currency('USD')),
-            createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
+            createdAt: new \DateTimeImmutable($data['created_at']),
             status: new TransactionStatus($data['status']),
             clientOrderId: $data['client_order_id'],
             comment: $data['comment'],
@@ -95,35 +95,4 @@ class MySQLTransactionRepository implements TransactionRepositoryInterface
             userIp: $data['user_ip']
         );
     }
-
-    public function findByWalletId(int $walletId): array
-    {
-        $query = "SELECT * FROM transactions WHERE wallet_id = :wallet_id";
-        $params = ['wallet_id' => $walletId];
-
-        $results = $this->connection->fetchAll($query, $params);
-
-        $transactions = [];
-        foreach ($results as $data) {
-            $transactions[] = $this->mapToTransaction($data);
-        }
-
-        return $transactions;
-    }
-
-    public function findTransactionsByAmount(Money $amount): array
-    {
-        $query = "SELECT * FROM transactions WHERE amount = :amount";
-        $params = ['amount' => $amount->getAmount()];
-
-        $results = $this->connection->fetchAll($query, $params);
-
-        $transactions = [];
-        foreach ($results as $data) {
-            $transactions[] = $this->mapToTransaction($data);
-        }
-
-        return $transactions;
-    }
-
 }

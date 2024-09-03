@@ -11,9 +11,5 @@ interface TransactionRepositoryInterface
 
     public function findById(int $id): ?Transaction;
 
-    public function findByWalletId(int $walletId): array;
-
-    public function findTransactionsByAmount(Money $amount): array;
-
     public function findByBillId(string $billId): ?Transaction;
 }

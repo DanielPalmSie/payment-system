@@ -17,20 +17,6 @@ class MySQLWalletRepository implements WalletRepositoryInterface
         $this->connection = $connection;
     }
 
-    public function findById(int $id): ?Wallet
-    {
-        $query = "SELECT * FROM wallets WHERE id = :id";
-        $params = ['id' => $id];
-
-        $result = $this->connection->fetch($query, $params);
-
-        if (!$result) {
-            return null;
-        }
-
-        return $this->mapToWallet($result);
-    }
-
     public function findByUserId(int $userId): ?Wallet
     {
         $query = "SELECT * FROM wallets WHERE user_id = :user_id";
@@ -79,14 +65,6 @@ class MySQLWalletRepository implements WalletRepositoryInterface
         }
     }
 
-    public function delete(int $id): void
-    {
-        $query = "DELETE FROM wallets WHERE id = :id";
-        $params = ['id' => $id];
-
-        $this->connection->executeQuery($query, $params);
-    }
-
     private function mapToWallet(array $data): Wallet
     {
         return new Wallet(
@@ -94,21 +72,5 @@ class MySQLWalletRepository implements WalletRepositoryInterface
             currency: new Currency($data['currency']),
             balance: new Money($data['balance'], new Currency($data['currency'])),
         );
-    }
-
-
-    public function findByCurrency(Currency $currency): array
-    {
-        $query = "SELECT * FROM wallets WHERE currency = :currency";
-        $params = ['currency' => $currency->getCode()];
-
-        $results = $this->connection->fetchAll($query, $params);
-
-        $wallets = [];
-        foreach ($results as $data) {
-            $wallets[] = $this->mapToWallet($data);
-        }
-
-        return $wallets;
     }
 }

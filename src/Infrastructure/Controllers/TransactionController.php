@@ -2,11 +2,11 @@
 
 namespace Daniel\PaymentSystem\Infrastructure\Controllers;
 
+use Daniel\PaymentSystem\Application\DTO\Request\TransactionRequest;
 use Daniel\PaymentSystem\Application\UseCases\TransactionUseCase;
-use Daniel\PaymentSystem\Application\DTO\TransactionRequest;
+use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class TransactionController
 {

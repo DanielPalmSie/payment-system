@@ -28,16 +28,6 @@ class TransactionStatus
         return $this->status === self::PENDING;
     }
 
-    public function isConfirmed(): bool
-    {
-        return $this->status === self::CONFIRMED;
-    }
-
-    public function isCanceled(): bool
-    {
-        return $this->status === self::CANCELED;
-    }
-
     public static function getAllowedStatuses(): array
     {
         return [

@@ -2,10 +2,9 @@
 
 namespace Daniel\PaymentSystem\Application\UseCases;
 
-use Daniel\PaymentSystem\Application\DTO\TransactionRequest;
-use Daniel\PaymentSystem\Application\DTO\TransactionResponse;
+use Daniel\PaymentSystem\Application\DTO\Request\TransactionRequest;
+use Daniel\PaymentSystem\Application\DTO\Response\TransactionResponse;
 use Daniel\PaymentSystem\Domain\Repositories\TransactionRepositoryInterface;
-use Daniel\PaymentSystem\Domain\ValueObjects\TransactionStatus;
 use Money\Money;
 
 class TransactionUseCase
@@ -37,18 +36,5 @@ class TransactionUseCase
             amount: $transaction->getAmount(),
             currency: $transaction->getAmount()->getCurrency()->getCode()
         );
-    }
-
-
-    public function updateTransactionStatus(int $transactionId, string $newStatus): void
-    {
-        $transaction = $this->transactionRepository->findById($transactionId);
-
-        if (!$transaction) {
-            throw new \Exception('Transaction not found.');
-        }
-
-        $transaction->setStatus(new TransactionStatus($newStatus));
-        $this->transactionRepository->save($transaction);
     }
 }

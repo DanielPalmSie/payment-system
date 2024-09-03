@@ -1,6 +1,6 @@
 <?php
 
-namespace Daniel\PaymentSystem\Application\DTO;
+namespace Daniel\PaymentSystem\Application\DTO\Request;
 
 use Money\Money;
 

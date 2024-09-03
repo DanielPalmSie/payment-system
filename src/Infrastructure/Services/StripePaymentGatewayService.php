@@ -4,6 +4,7 @@ namespace Daniel\PaymentSystem\Infrastructure\Services;
 
 use Daniel\PaymentSystem\Domain\Services\PaymentGatewayInterface;
 
+//TODO: Условимся что это код реального страйпа
 class StripePaymentGatewayService implements PaymentGatewayInterface
 {
     public function processPayment(Money $amount, string $currency, string $source, string $destination): string
