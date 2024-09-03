@@ -1,0 +1,17 @@
+{
+    "name": "daniel/payment-system",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Daniel\\PaymentSystem\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Daniel"
+        }
+    ],
+    "require": {
+        "moneyphp/money": "^4.5"
+    }
+}
