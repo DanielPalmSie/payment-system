@@ -12,6 +12,8 @@
         }
     ],
     "require": {
-        "moneyphp/money": "^4.5"
+        "moneyphp/money": "^4.5",
+        "psr/http-message": "^2.0",
+        "laminas/laminas-diactoros": "^3.3"
     }
 }

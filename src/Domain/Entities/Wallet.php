@@ -54,6 +54,11 @@ class Wallet
         return $this->updatedAt;
     }
 
+    public function setBalance(Money $balance): void
+    {
+        $this->balance = $balance;
+    }
+
     public function deposit(Money $amount): void
     {
         $this->balance = $this->balance->add($amount);

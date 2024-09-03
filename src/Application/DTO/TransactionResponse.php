@@ -7,37 +7,79 @@ use DateTimeImmutable;
 
 class TransactionResponse
 {
-    private string $paymentToken;
-    private string $type;
+    private int $id;
+    private DateTimeImmutable $created;
+    private DateTimeImmutable $updated;
+    private string $billId;
+    private Money $fee;
+    private string $orderType;
+    private string $comment;
+    private string $status;
     private Money $amount;
-    private Money $balanceBefore;
-    private Money $balanceAfter;
-    private DateTimeImmutable $createdAt;
+    private string $currency;
 
     public function __construct(
-        string $paymentToken,
-        string $type,
+        int $id,
+        DateTimeImmutable $created,
+        DateTimeImmutable $updated,
+        string $billId,
+        Money $fee,
+        string $orderType,
+        string $comment,
+        string $status,
         Money $amount,
-        Money $balanceBefore,
-        Money $balanceAfter,
-        DateTimeImmutable $createdAt
+        string $currency
     ) {
-        $this->paymentToken = $paymentToken;
-        $this->type = $type;
+        $this->id = $id;
+        $this->created = $created;
+        $this->updated = $updated;
+        $this->billId = $billId;
+        $this->fee = $fee;
+        $this->orderType = $orderType;
+        $this->comment = $comment;
+        $this->status = $status;
         $this->amount = $amount;
-        $this->balanceBefore = $balanceBefore;
-        $this->balanceAfter = $balanceAfter;
-        $this->createdAt = $createdAt;
+        $this->currency = $currency;
     }
 
-    public function getPaymentToken(): string
+    public function getId(): int
     {
-        return $this->paymentToken;
+        return $this->id;
     }
 
-    public function getType(): string
+    public function getCreated(): DateTimeImmutable
     {
-        return $this->type;
+        return $this->created;
+    }
+
+    public function getUpdated(): DateTimeImmutable
+    {
+        return $this->updated;
+    }
+
+    public function getBillId(): string
+    {
+        return $this->billId;
+    }
+
+    public function getFee(): Money
+    {
+        return $this->fee;
+    }
+
+    public function getOrderType(): string
+    {
+        return $this->orderType;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
     }
 
     public function getAmount(): Money
@@ -45,18 +87,24 @@ class TransactionResponse
         return $this->amount;
     }
 
-    public function getBalanceBefore(): Money
+    public function getCurrency(): string
     {
-        return $this->balanceBefore;
+        return $this->currency;
     }
 
-    public function getBalanceAfter(): Money
+    public function toArray(): array
     {
-        return $this->balanceAfter;
-    }
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
+        return [
+            'id' => $this->id,
+            'created' => $this->created->format(DATE_ATOM),
+            'updated' => $this->updated->format(DATE_ATOM),
+            'bill_id' => $this->billId,
+            'fee' => $this->fee->getAmount(),
+            'order_type' => $this->orderType,
+            'comment' => $this->comment,
+            'status' => $this->status,
+            'amount' => $this->amount->getAmount(),
+            'currency' => $this->currency,
+        ];
     }
 }

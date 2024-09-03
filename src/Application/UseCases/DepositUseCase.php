@@ -39,7 +39,6 @@ class DepositUseCase
                 throw new Exception('Wallet not found for user ID: ' . $request->getUserId());
             }
 
-            // 2. Инициировать депозит через платежный шлюз
             $paymentToken = $this->paymentGateway->processPayment(
                 $request->getAmount(),
                 $wallet->getCurrency()->getCode(),
@@ -54,24 +53,63 @@ class DepositUseCase
                 amount: $request->getAmount(),
                 balanceBefore: new Money(0, $request->getAmount()->getCurrency()),
                 balanceAfter: new Money(0, $request->getAmount()->getCurrency()),
+                updatedAt: new DateTimeImmutable(),
                 createdAt: new DateTimeImmutable(),
-                status: new TransactionStatus(TransactionStatus::PENDING)
+                status: new TransactionStatus(TransactionStatus::PENDING),
+                clientOrderId: $request->getClientOrderId(),
+                comment: $request->getComment(),
+                expire: $request->getExpire(),
+                userIp: $request->getUserIp()
             );
+
 
             $transactionId = $this->transactionRepository->save($transaction);
 
-            $response = [
-                'success' => true,
-                'id' => (string) $transactionId,
-                'bill_id' => $transactionId, // Вроде тоже самое что и id транзакции ?
-                'amount' => $request->getAmount()->getAmount() / 100,
-                'card_number' => $paymentToken // В целях безопасности данные карты храню в виде токена
-            ];
-
-            return new DepositResponse(true, json_encode($response));
+            return new DepositResponse(
+                success: true,
+                transactionId: (string)$transactionId,
+                billId: (string)$transactionId, //TODO: Вроде тоже самое что и id транзакции ?
+                amount: $request->getAmount()->getAmount() / 100,
+                cardNumber: $paymentToken //TODO: В целях безопасности креды карты храню в виде токена который сгенерировал например страйп на основе данных карты
+            );
 
         } catch (Exception $e) {
-            return new DepositResponse(false, 'Deposit failed: ' . $e->getMessage());
+            return new DepositResponse(
+                success: false,
+                transactionId: '',
+                billId: '',
+                amount: 0.0,
+                cardNumber: ''
+            );
         }
+    }
+
+    public function confirmDeposit(string $billId): void
+    {
+        $transaction = $this->transactionRepository->findByBillId($billId);
+
+        if ($transaction === null) {
+            throw new \Exception('Transaction not found for Bill ID: ' . $billId);
+        }
+
+        if (!$transaction->getStatus()->isPending()) {
+            throw new \Exception('Transaction is not in a pending state');
+        }
+
+        $transaction->setStatus(new TransactionStatus(TransactionStatus::CONFIRMED));
+        $transaction->setBalanceAfter(
+            new Money($transaction->getAmount()->getAmount(), $transaction->getAmount()->getCurrency())
+        );
+        $this->transactionRepository->save($transaction);
+
+        $wallet = $this->walletRepository->findByUserId($transaction->getUserId());
+
+        if ($wallet === null) {
+            throw new \Exception('Wallet not found for user ID: ' . $transaction->getUserId());
+        }
+
+        $newBalance = $wallet->getBalance()->add($transaction->getAmount());
+        $wallet->setBalance($newBalance);
+        $this->walletRepository->save($wallet);
     }
 }

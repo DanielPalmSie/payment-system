@@ -17,4 +17,12 @@ class BalanceResponse
     {
         return $this->balance;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'success' => true,
+            'balance' => $this->getBalance(),
+        ];
+    }
 }

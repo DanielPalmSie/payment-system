@@ -4,22 +4,29 @@ namespace Daniel\PaymentSystem\Application\DTO;
 
 class TransactionRequest
 {
-    private int $userId;
-    private string $paymentToken;
+    private int $id;
+    private string $billId;
+    private string $orderType;
 
-    public function __construct(int $userId, string $paymentToken)
+    public function __construct(int $id, string $billId, string $orderType)
     {
-        $this->userId = $userId;
-        $this->paymentToken = $paymentToken;
+        $this->id = $id;
+        $this->billId = $billId;
+        $this->orderType = $orderType;
     }
 
-    public function getUserId(): int
+    public function getId(): int
     {
-        return $this->userId;
+        return $this->id;
     }
 
-    public function getPaymentToken(): string
+    public function getBillId(): string
     {
-        return $this->paymentToken;
+        return $this->billId;
+    }
+
+    public function getOrderType(): string
+    {
+        return $this->orderType;
     }
 }

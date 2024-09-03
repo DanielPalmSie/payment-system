@@ -15,9 +15,10 @@ class Transaction
         private readonly TransactionTypeEnum $type,
         private readonly Money               $amount,
         private readonly Money               $balanceBefore,
-        private readonly Money               $balanceAfter,
+        private Money                        $balanceAfter,
+        private DateTimeImmutable            $updatedAt,
         private readonly DateTimeImmutable   $createdAt,
-        private readonly TransactionStatus   $status,
+        private TransactionStatus            $status,
         private readonly string              $clientOrderId,
         private readonly string              $comment,
         private readonly int                 $expire,
@@ -89,10 +90,27 @@ class Transaction
         return $this->createdAt;
     }
 
+    public function getUpdatedAt(): DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
     public
     function getStatus(): TransactionStatus
     {
         return $this->status;
+    }
+
+    public function setStatus(TransactionStatus $status): void
+    {
+        $this->status = $status;
+        $this->updatedAt = new DateTimeImmutable();
+    }
+
+    public function setBalanceAfter(Money $balanceAfter): void
+    {
+        $this->balanceAfter = $balanceAfter;
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getUserIp(): string
